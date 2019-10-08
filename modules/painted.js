@@ -110,6 +110,8 @@ void main() {
 
 
 function Painted(renderer, params = {}) {
+  // HACK: disable, doesn't work in WebXR.
+  return renderer;
 
   let w = 1;
   let h = 1;

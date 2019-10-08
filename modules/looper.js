@@ -74,6 +74,8 @@ async function init() {
     sceneTransform.decompose(scenePos, sceneQuat, sceneScale);
     console.log('sceneCamera', sceneCamera);
     three.setOffset(scenePos, sceneQuat);
+  } else {
+    three.setOffset();
   }
   three.renderer.setAnimationLoop(update);
 

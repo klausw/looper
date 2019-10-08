@@ -77,7 +77,9 @@ function getCamera(fov) {
 }
 
 function getLastCameraObject(fov) {
-  return camera;
+  let lastCamera = camera;
+  camera = null;
+  return lastCamera;
 }
 
 function getOrthoCamera(w, h) {
@@ -87,7 +89,11 @@ function getOrthoCamera(w, h) {
 
 function setOffset(pos, quat) {
   if (!navigator.xr) return;
-  cameraOffset = new XRRigidTransform(pos, quat);
+  if (pos && quat) {
+    cameraOffset = new XRRigidTransform(pos, quat);
+  } else {
+    cameraOffset = null;
+  }
   console.log(cameraOffset);
 }
 

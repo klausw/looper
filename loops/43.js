@@ -167,7 +167,8 @@ scene.add(ambientLight);
 const light = new THREE.HemisphereLight( 0xcefeff, 0xb3eaf0, .5 );
 scene.add( light );
 
-camera.position.set(10,-15,10);
+scene.scale.multiplyScalar(0.02);
+camera.position.set(10,-15,10).multiplyScalar(0.02);
 camera.lookAt(group.position);
 renderer.setClearColor(0xffffff,1);
 renderer.shadowMap.enabled = true;
