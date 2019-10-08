@@ -1,6 +1,8 @@
 import THREE from '../third_party/three.js';
 import { WEBVR } from './WebVR.js';
 
+let cameraOffset = null;
+
 function getWebGLRenderer() {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(400, 400);
@@ -9,6 +11,12 @@ function getWebGLRenderer() {
   canvas.style.height = '400px';
 
   renderer.setPixelRatio(window.devicePixelRatio);
+  let match = navigator.userAgent.match(/Chrome\/79.0.(\d+)/);
+  if (!match || match[1] > 3936) {
+    // HACK: Chrome <= 79.0.3936 had broken framebufferScaleFactor, don't
+    // use it on those versions.
+    renderer.vr.setFramebufferScaleFactor(0.5);
+  }
 
   let btnVR = WEBVR.createButton(
       renderer, {
@@ -30,22 +38,32 @@ function getWebGLRenderer() {
   btnAR.style.left = 'calc(50% + 10px)';
   document.body.appendChild(btnAR);
 
-  renderer.vr.addEventListener('sessionstart',
-			       function(ev) {
-				 console.log('sessionstart', ev);
-                                 renderer.vr.enabled = true;
-                                 if (ev.target.getSession().blendMode != 'opaque') {
-                                   renderer.autoClearColor = false;
-                                 }
-                                 document.querySelector('canvas').style.display = 'none';
-			       });
-  renderer.vr.addEventListener('sessionend',
-			       function(ev) {
-				 console.log('sessionend', ev);
-                                 renderer.vr.enabled = false;
-                                 renderer.autoClearColor = true;
-                                 document.querySelector('canvas').style.display = '';
-			       });
+  renderer.vr.addEventListener(
+      'sessionstart',
+      function(ev) {
+	console.log('sessionstart', ev);
+        renderer.vr.enabled = true;
+        let session = ev.target.getSession();
+        if (session.blendMode != 'opaque') {
+          renderer.autoClearColor = false;
+        }
+        if (cameraOffset) {
+          session.requestReferenceSpace('local').then((space) => {
+            console.log('space', space);
+            let offsetSpace = space.getOffsetReferenceSpace(cameraOffset);
+            ev.target.setReferenceSpace(offsetSpace);
+          });
+        }
+        document.querySelector('canvas').style.display = 'none';
+      });
+  renderer.vr.addEventListener(
+      'sessionend',
+      function(ev) {
+	console.log('sessionend', ev);
+        renderer.vr.enabled = false;
+        renderer.autoClearColor = true;
+        document.querySelector('canvas').style.display = '';
+      });
   return renderer;
 }
 
@@ -63,7 +81,14 @@ function getLastCameraObject(fov) {
 }
 
 function getOrthoCamera(w, h) {
+  camera = null;
   return new THREE.OrthographicCamera(-w, w, h, -h, -100, 100);
 }
 
-export { renderer, getCamera, getLastCameraObject, getOrthoCamera };
+function setOffset(pos, quat) {
+  if (!navigator.xr) return;
+  cameraOffset = new XRRigidTransform(pos, quat);
+  console.log(cameraOffset);
+}
+
+export { renderer, getCamera, getLastCameraObject, getOrthoCamera, setOffset };

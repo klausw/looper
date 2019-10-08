@@ -61,24 +61,20 @@ async function init() {
   function update() {
     //requestAnimationFrame(update);
     if (!skip) {
-      let origRender = three.renderer.render;
-      three.renderer.render = function(scene, camera) {
-        scene.position.copy(scenePos);
-        scene.quaternion.copy(sceneQuat);
-        origRender.apply(three.renderer, arguments);
-      };
       module.draw(startTime);
-      three.renderer.render = origRender;
     }
     capturer.capture(module.canvas);
   }
 
   sceneCamera = three.getLastCameraObject();
-  sceneCamera.updateMatrixWorld();
-  let sceneTransform = new THREE.Matrix4();
-  sceneTransform.getInverse(sceneCamera.matrixWorld);
-  sceneTransform.decompose(scenePos, sceneQuat, sceneScale);
-  console.log('sceneCamera', sceneCamera.matrixWorld);
+  if (sceneCamera) {
+    sceneCamera.updateMatrixWorld();
+    let sceneTransform = new THREE.Matrix4();
+    sceneTransform.getInverse(sceneCamera.matrixWorld);
+    sceneTransform.decompose(scenePos, sceneQuat, sceneScale);
+    console.log('sceneCamera', sceneCamera);
+    three.setOffset(scenePos, sceneQuat);
+  }
   three.renderer.setAnimationLoop(update);
 
   window.addEventListener('hashchange', async e => {
