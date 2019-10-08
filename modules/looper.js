@@ -1,4 +1,6 @@
 import * as emptyModule from '../loops/empty.js';
+import THREE from '../third_party/three.js';
+import * as three from './three.js';
 
 async function loadModule() {
   const num = window.location.hash.substr(1) || 1;
@@ -41,6 +43,10 @@ async function init() {
   });
 
   let startTime = 0;
+  let sceneCamera;
+  let scenePos = new THREE.Vector3();
+  let sceneQuat = new THREE.Quaternion();
+  let sceneScale = new THREE.Vector3();
 
   function capture() {
     capturer.start();
@@ -53,12 +59,27 @@ async function init() {
   });
 
   function update() {
-    requestAnimationFrame(update);
-    if (!skip) module.draw(startTime);
+    //requestAnimationFrame(update);
+    if (!skip) {
+      let origRender = three.renderer.render;
+      three.renderer.render = function(scene, camera) {
+        scene.position.copy(scenePos);
+        scene.quaternion.copy(sceneQuat);
+        origRender.apply(three.renderer, arguments);
+      };
+      module.draw(startTime);
+      three.renderer.render = origRender;
+    }
     capturer.capture(module.canvas);
   }
 
-  update();
+  sceneCamera = three.getLastCameraObject();
+  sceneCamera.updateMatrixWorld();
+  let sceneTransform = new THREE.Matrix4();
+  sceneTransform.getInverse(sceneCamera.matrixWorld);
+  sceneTransform.decompose(scenePos, sceneQuat, sceneScale);
+  console.log('sceneCamera', sceneCamera.matrixWorld);
+  three.renderer.setAnimationLoop(update);
 
   window.addEventListener('hashchange', async e => {
     reload();

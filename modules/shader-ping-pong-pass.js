@@ -26,8 +26,10 @@ class ShaderPingPongPass {
   }
 
   render(final) {
-
-    this.renderer.render(this.orthoScene, this.orthoCamera, final ? null : this.fbos[1 - this.currentFBO]);
+    let oldTarget = this.renderer.getRenderTarget();
+    this.renderer.setRenderTarget(final ? null : this.fbos[1 - this.currentFBO]);
+    this.renderer.render(this.orthoScene, this.orthoCamera);
+    this.renderer.setRenderTarget(oldTarget);
     this.currentFBO = 1 - this.currentFBO;
 
   }

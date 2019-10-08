@@ -138,12 +138,15 @@ function Post(renderer, params = {}) {
   const rgbPass = new ShaderPass(renderer, rgbShader, w, h, THREE.RGBAFormat, THREE.UnsignedByteType, THREE.LinearFilter, THREE.LinearFilter, THREE.ClampToEdgeWrapping, THREE.ClampToEdgeWrapping);
 
   function render(scene, camera) {
-    renderer.render(scene, camera, colorFBO);
+    let oldRenderTarget = renderer.getRenderTarget();
+    renderer.setRenderTarget(colorFBO);
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(oldRenderTarget);
 
     let offset = 1;
     let tw = w;
     let th = h;
-    blurShader.uniforms.inputTexture.value = colorFBO;
+    blurShader.uniforms.inputTexture.value = colorFBO.texture;
     for (let j = 0; j < levels; j++) {
       tw /= 2;
       th /= 2;
@@ -153,10 +156,10 @@ function Post(renderer, params = {}) {
       blurShader.uniforms.direction.value.set(offset, 0);
       const blurPass = blurPasses[j];
       blurPass.render();
-      blurShader.uniforms.inputTexture.value = blurPass.fbos[blurPass.currentFBO];
+      blurShader.uniforms.inputTexture.value = blurPass.fbos[blurPass.currentFBO].texture;
       blurShader.uniforms.direction.value.set(0, offset);
       blurPass.render();
-      blurShader.uniforms.inputTexture.value = blurPass.fbos[blurPass.currentFBO];
+      blurShader.uniforms.inputTexture.value = blurPass.fbos[blurPass.currentFBO].texture;
     }
 
     antialiasPass.render();

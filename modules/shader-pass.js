@@ -24,8 +24,10 @@ class ShaderPass {
   }
 
   render(final) {
-
-    this.renderer.render(this.orthoScene, this.orthoCamera, final ? null : this.fbo);
+    let oldRenderTarget = this.renderer.getRenderTarget();
+    this.renderer.setRenderTarget(final ? null : this.fbo);
+    this.renderer.render(this.orthoScene, this.orthoCamera);
+    this.renderer.setRenderTarget(oldRenderTarget);
 
   }
 

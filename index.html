@@ -11,7 +11,7 @@
 
 <body>
   <header>
-    <h1>Looper</h1>
+    <h1>Looper <span id='idx'></span></h1>
     <h2>A tool to create looperinos · <a href="https://github.com/spite/looper" >GitHub</a> | <b>Chrome and Safari Tech Preview only</b></h2>
     <div class="recordPanel">
       <a href="#" class="btn orange" id="start">⚫ Record</a>
@@ -31,12 +31,14 @@
     if (index === 1) return;
     window.location.hash = `${--index}`;
     e.preventDefault();
+    document.getElementById('idx').innerHTML = '#' + getIndex();
   }
 
   function next(e) {
     let index = getIndex();
     window.location.hash = ++index;
     e.preventDefault();
+    document.getElementById('idx').innerHTML = '#' + getIndex();
   }
 
   document.getElementById('backButton').addEventListener('click', (e) => prev(e));
@@ -44,8 +46,10 @@
 
   const cur = getIndex();
   if (isNaN(cur) || cur === '' || cur === undefined) {
-    window.location.hash = 1;
+    cur = 1;
+    window.location.hash = cur;
   }
+  document.getElementById('idx').innerHTML = '#' + getIndex();
   </script>
   <script src="js/CCapture.all.min.js"></script>
   <script async type="module" src="modules/looper.js"></script>

@@ -12,8 +12,14 @@ h1 {
   color: #CD6509;
 }
 
+h1 span {
+  font-size: inherit;
+  font-family: inherit;
+}
+
 h2 {
   font-size: 1em;
+  text-shadow: 0 0 5px white;
 }
 
 a {
