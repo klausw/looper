@@ -11,10 +11,10 @@ function getWebGLRenderer() {
   canvas.style.height = '400px';
 
   renderer.setPixelRatio(window.devicePixelRatio);
-  let match = navigator.userAgent.match(/Chrome\/79.0.(\d+)/);
-  if (!match || match[1] > 3936) {
-    // HACK: Chrome <= 79.0.3936 had broken framebufferScaleFactor, don't
-    // use it on those versions.
+  let match = navigator.userAgent.match(/Chrome\/(\d+).\d+.(\d+)/);
+  if (!match || match[1] > 79 || match[2] >= 3937) {
+    // HACK: Chrome <= 79.0.3936 had broken framebufferScaleFactor in AR mode,
+    // don't set it on those versions.
     renderer.vr.setFramebufferScaleFactor(0.5);
   }
 
