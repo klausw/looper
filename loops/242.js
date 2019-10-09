@@ -131,7 +131,7 @@ function Post(renderer, params = {}) {
   }
 }
 
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 const canvas = renderer.domElement;
 const camera = getCamera(45);

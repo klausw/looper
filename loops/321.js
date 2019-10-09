@@ -158,7 +158,7 @@ controls.screenSpacePanning = true;
 const scene = new THREE.Scene();
 const group = new THREE.Group();
 
-const post = new Post(renderer, { minLeveL: .25, maxLevel: .5, gamma: 1. });
+const post = renderer; // FIXME new Post(renderer, { minLeveL: .25, maxLevel: .5, gamma: 1. });
 
 const r = .2;
 const curve = new THREE.Curves.CinquefoilKnot();

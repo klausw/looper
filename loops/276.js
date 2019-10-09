@@ -13,7 +13,7 @@ controls.screenSpacePanning = true;
 const scene = new THREE.Scene();
 const group = new THREE.Group();
 
-const post = new Post(renderer, { minLeveL: 0, maxLevel: .5 });
+const post = renderer; // FIXME new Post(renderer, { minLeveL: 0, maxLevel: .5 });
 
 const points = pointsOnSphere(100);
 

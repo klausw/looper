@@ -107,7 +107,7 @@ function Post(renderer, params = {}) {
   }
 }
 
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, .5);
 directionalLight.position.set(-2, 2, 2);

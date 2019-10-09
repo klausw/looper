@@ -247,7 +247,7 @@ function Post(renderer, params = {}) {
     render
   }
 }
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 const loopDuration = 6;
 

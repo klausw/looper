@@ -135,7 +135,7 @@ function Post(renderer, params = {}) {
   }
 }
 
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 camera.position.set(5, 3, 6);
 camera.lookAt(new THREE.Vector3(0, 0, 0));

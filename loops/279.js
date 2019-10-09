@@ -90,7 +90,7 @@ controls.screenSpacePanning = true;
 const scene = new THREE.Scene();
 const group = new THREE.Group();
 
-const post = new Post(renderer, { minLeveL: .35, maxLevel: .65, gamma: 1.5 });
+const post = renderer; // FIXME new Post(renderer, { minLeveL: .35, maxLevel: .65, gamma: 1.5 });
 
 const geo = new THREE.CylinderBufferGeometry(1, 1, 1, 18, 500, true);
 const mat = new THREE.RawShaderMaterial({

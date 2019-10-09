@@ -12,7 +12,7 @@ controls.screenSpacePanning = true;
 const scene = new THREE.Scene();
 const group = new THREE.Group();
 
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 function CurvedLineCurve(from, to) {
   THREE.Curve.call(this);

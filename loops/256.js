@@ -77,7 +77,7 @@ function Post(renderer, params = {}) {
   }
 }
 
-const post = new Post(renderer);
+const post = renderer; // FIXME new Post(renderer);
 
 scene.add(group);
 
