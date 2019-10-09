@@ -50,7 +50,11 @@
     window.location.hash = cur;
   }
   document.getElementById('idx').innerHTML = '#' + getIndex();
-  </script>
+
+  window.addEventListener('hashchange', async e => {
+    document.getElementById('idx').innerHTML = '#' + getIndex();
+  })
+</script>
   <script src="js/CCapture.all.min.js"></script>
   <script async type="module" src="modules/looper.js"></script>
 </body>

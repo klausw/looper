@@ -20,7 +20,9 @@ const group = new THREE.Group();
 const controls = new OrbitControls(camera, canvas);
 controls.screenSpacePanning = true
 
-camera.position.set(35, 15, -35).multiplyScalar(.075).multiplyScalar(0.1);
+const overallScale = 0.1;
+
+camera.position.set(35, 15, -35).multiplyScalar(.075).multiplyScalar(overallScale);
 camera.lookAt(group.position);
 renderer.setClearColor(0xEABA6D, 1);
 
@@ -44,7 +46,7 @@ function prepareMesh(w, c) {
     color: gradient.getAt(c),
     resolution: resolution,
     sizeAttenuation: true,
-    lineWidth: w / 10,
+    lineWidth: w / overallScale,
     near: camera.near,
     far: camera.far,
     repeat: new THREE.Vector2(1, 1),
@@ -97,7 +99,7 @@ for (let j = 0; j < LINES; j++) {
   const speed = 1; // Math.floor(Maf.randomInRange(1, 4));
   meshes.push({ mesh, offset, speed });
 }
-group.scale.setScalar(.01);
+group.scale.setScalar(.1 * overallScale);
 scene.add(group);
 
 const loopDuration = 3;

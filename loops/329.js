@@ -21,7 +21,7 @@ const group = new THREE.Group();
 const controls = new OrbitControls(camera, canvas);
 controls.screenSpacePanning = true
 
-let overallScale = 0.1;
+const overallScale = 0.1;
 
 camera.position.set(35, 15, -35).multiplyScalar(.075).multiplyScalar(overallScale);
 camera.lookAt(group.position);
