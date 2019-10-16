@@ -21,14 +21,32 @@ class ShaderPass {
     this.orthoScene.add(this.orthoQuad);
     this.texture = this.fbo.texture;
 
+    renderer.vr.addEventListener( 'sessionstart', this.onSessionStateChange );
+    renderer.vr.addEventListener( 'sessionend', this.onSessionStateChange );
+  }
+
+  onSessionStateChange(ev) {
+    console.log(ev);
   }
 
   render(final) {
     let oldRenderTarget = this.renderer.getRenderTarget();
-    this.renderer.setRenderTarget(final ? null : this.fbo);
+    let wasVREnabled = this.renderer.vr.enabled;
+    this.renderer.vr.enabled = false;
+    if (final) {
+      this.renderer.setRenderTarget(null);
+      if (this.renderer.vr.isPresenting()) {
+        let session = this.renderer.vr.getSession();
+        if (session && session.renderState.baseLayer) {
+          this.renderer.setFramebuffer(session.renderState.baseLayer.framebuffer);
+        }
+      }
+    } else {
+      this.renderer.setRenderTarget(this.fbo);
+    }
     this.renderer.render(this.orthoScene, this.orthoCamera);
+    this.renderer.vr.enabled = wasVREnabled;
     this.renderer.setRenderTarget(oldRenderTarget);
-
   }
 
   setSize(width, height) {
